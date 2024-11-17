@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "../../../../lib/db";
 
-/**
- * Updates a to-do task by its ID.
- * 
- * @param req - The incoming PUT request.
- * @param context - The context containing route parameters.
- * @returns JSON response with the updated task or an error message.
- */
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } } // Destructure params here
@@ -17,7 +11,7 @@ export async function PUT(
 
   if (!task_name) {
     return NextResponse.json(
-      { message: "Task name is required to update the task." },
+      { message: "Task name is required" },
       { status: 400 }
     );
   }
@@ -29,7 +23,7 @@ export async function PUT(
     );
 
     if (res.rowCount === 0) {
-      return NextResponse.json({ message: "No task found with the given ID." }, { status: 404 });
+      return NextResponse.json({ message: "Task not found" }, { status: 404 });
     }
 
     // Returning the updated task as a response
@@ -37,19 +31,13 @@ export async function PUT(
   } catch (error) {
     console.error("Error updating task:", error);
     return NextResponse.json(
-      { message: "An unexpected error occurred while updating the task." },
+      { message: "Failed to update task" },
       { status: 500 }
     );
   }
 }
 
-/**
- * Deletes a to-do task by its ID.
- * 
- * @param req - The incoming DELETE request.
- * @param context - The context containing route parameters.
- * @returns JSON response with a success or error message.
- */
+// DELETE request to delete a todo by id
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -63,19 +51,18 @@ export async function DELETE(
     );
 
     if (res.rowCount === 0) {
-      return NextResponse.json({ message: "No task found with the given ID." }, { status: 404 });
+      return NextResponse.json({ message: "Task not found" }, { status: 404 });
     }
 
     return NextResponse.json(
-      { message: "Task deleted successfully." },
+      { message: "Task deleted successfully" },
       { status: 200 }
     );
   } catch (error) {
     console.error("Error deleting task:", error);
     return NextResponse.json(
-      { message: "An unexpected error occurred while deleting the task." },
+      { message: "Failed to delete task" },
       { status: 500 }
     );
   }
 }
-
