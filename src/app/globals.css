@@ -1,109 +1,116 @@
-/* app/globals.css */
-
 /* Global styles for body */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
-  background: linear-gradient(to right, #e0f7fa, #80deea); /* Soft gradient background */
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f7d9c4, #f2b78b);
   margin: 0;
-  padding: 20px; /* Added padding for better spacing */
-  color: #333; /* Darker text color for better contrast */
-  line-height: 1.6; /* Improved readability */
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-/* Container for centering content */
-.container {
-  max-width: 600px;
-  margin: auto;
+/* Container for the Todo App */
+.todo-container {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  background: white; /* White background for the form container */
-  border-radius: 10px; /* Rounded corners for the container */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Title Styling */
+h1 {
+  font-size: 2.5rem;
+  color: #d17c49;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 /* Styling for input fields */
-input {
+input[type="text"] {
   font-size: 16px;
-  padding: 12px;
-  border: 1px solid #007bff; /* Blue border */
-  border-radius: 8px; /* More rounded corners */
-  background-color: #ffffff; /* White background for input fields */
-  color: #333; /* Dark text for input fields */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 80%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
 }
 
 /* Input focus styling */
 input:focus {
-  border-color: #007bff; /* Blue focus color */
+  border-color: #d17c49;
   outline: none;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Soft blue glow */
-  background-color: #e9f5ff; /* Light blue background on focus */
-}
-
-/* Input hover effect */
-input:hover {
-  border-color: #0056b3; /* Darker blue on hover */
+  box-shadow: 0 0 5px rgba(209, 124, 73, 0.6);
 }
 
 /* Styling for buttons */
 button {
   font-size: 16px;
-  background: linear-gradient(45deg, #ff6f61, #ff3d00); /* Gradient button color */
+  background-color: #d17c49;
   color: white;
   border: none;
-  padding: 12px 20px;
-  border-radius: 8px; /* More rounded corners */
+  padding: 10px 20px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-left: 10px;
-  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Initial shadow for depth */
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 /* Button hover and active state styling */
 button:hover {
-  background: linear-gradient(45deg, #ff3d00, #ff6f61); /* Reverse gradient on hover */
-  transform: scale(1.05); /* Slightly enlarges button on hover */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+  background-color: #a8623b;
 }
 
 button:active {
-  background: linear-gradient(45deg, #cc4a3c, #cc3d00); /* Even darker gradient when active */
-  transform: scale(1); /* Returns to original size when clicked */
+  background-color: #854d2f;
+  transform: scale(0.95);
 }
 
-/* Additional button styles for secondary actions */
-button.secondary {
-  background: linear-gradient(45deg, #28a745, #218838); /* Green button color */
+/* Task item styling */
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%; /* Matches the input width for alignment */
+  padding: 10px;
+  margin: 10px 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-button.secondary:hover {
-  background: linear-gradient(45deg, #218838, #28a745); /* Reverse gradient on hover */
+.todo-item span {
+  flex-grow: 1;
+  text-align: left;
+  padding: 0 10px;
+  word-break: break-word;
+  text-decoration: none;
 }
 
-/* Responsive font size for smaller screens */
+/* Checkbox styling */
+.todo-item input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Buttons within the task items */
+.todo-item-buttons {
+  display: flex;
+  gap: 10px; /* Adds spacing between Delete and Edit buttons */
+}
+
+/* Responsive adjustments for smaller screens */
 @media (max-width: 600px) {
-  body {
-    font-size: 14px;
+  input[type="text"],
+  .todo-item {
+      width: 90%;
   }
 
-  input, button {
-    font-size: 14px;
-    padding: 10px; /* Adjust padding for smaller screens */
+  button {
+      font-size: 14px;
   }
-}
-
-/* Additional styles for form elements */
-label {
-  font-weight: bold; /* Bold labels for better visibility */
-  margin-bottom: 5px; /* Spacing between label and input */
-  display: block; /* Ensures labels are block elements */
-}
-
-.error-message {
-  color: #d9534f; /* Red color for error messages */
-  font-size: 14px; /* Slightly smaller font for error messages */
-}
-
-/* Add some spacing between form elements */
-.form-group {
-  margin-bottom: 15px; /* Space between form elements */
 }
