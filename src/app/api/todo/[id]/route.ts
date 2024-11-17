@@ -1,26 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "../../../../lib/db"; // Ensure this file exports correctly
 
+// Define the response type for better clarity
+interface ApiResponse {
+  message?: string;
+  task?: any; // You can replace 'any' with a more specific type if you have one
+}
 
+// PUT request to update a todo by id
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } } // Destructure params here
-) {
+  { params }: { params: { id: string } }
+): Promise<NextResponse<ApiResponse>> {
   const { id } = params; // Access params directly
   const { task_name }: { task_name?: string } = await req.json();
 
-//   if (!task_name) {
-//     return NextResponse.json(
-//       { message: "Task name is required" },
-//       { status: 400 }
-//     );
-//   }
+  // Check if task_name is provided
+  if (!task_name) {
+    return NextResponse.json(
+      { message: "Task name is required" },
+      { status: 400 }
+    );
+  }
 
-//   try {
-//     const res = await pool.query(
-//       "UPDATE todos SET task_name = $1 WHERE id = $2 RETURNING *",
-//       [task_name, id]
-//     );
+  try {
+    const res = await pool.query(
+      "UPDATE todos SET task_name = $1 WHERE id = $2 RETURNING *",
+      [task_name, id]
+    );
 
     if (res.rowCount === 0) {
       return NextResponse.json({ message: "Task not found" }, { status: 404 });
@@ -41,7 +48,7 @@ export async function PUT(
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
-) {
+): Promise<NextResponse<ApiResponse>> {
   const { id } = params; // Access params directly
 
   try {
