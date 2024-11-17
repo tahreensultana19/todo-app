@@ -10,9 +10,9 @@ import { pool } from "../../../../lib/db";
  */
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } } // Destructure params here
 ) {
-  const { id } = context.params; // Access params from context
+  const { id } = params; // Access params directly
   const { task_name }: { task_name?: string } = await req.json();
 
   if (!task_name) {
@@ -32,6 +32,7 @@ export async function PUT(
       return NextResponse.json({ message: "No task found with the given ID." }, { status: 404 });
     }
 
+    // Returning the updated task as a response
     return NextResponse.json(res.rows[0], { status: 200 });
   } catch (error) {
     console.error("Error updating task:", error);
@@ -51,9 +52,9 @@ export async function PUT(
  */
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = context.params; // Access params from context
+  const { id } = params; // Access params directly
 
   try {
     const res = await pool.query(
@@ -77,3 +78,4 @@ export async function DELETE(
     );
   }
 }
+
