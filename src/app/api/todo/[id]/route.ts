@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { pool } from "../../../../lib/db";
+import { pool } from "../../../../lib/db"; // Ensure this file exports correctly
 
+interface ApiResponse {
+  message?: string;
+  task?: any; // Specify a more detailed type for task if needed
+}
 
+// PUT request to update a todo by id
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } } // Destructure params here
-) {
-  const { id } = params; // Access params directly
+  { params }: { params: { id: string } }
+): Promise<NextResponse<ApiResponse>> {
+  const { id } = params;
   const { task_name }: { task_name?: string } = await req.json();
 
   if (!task_name) {
@@ -23,15 +28,26 @@ export async function PUT(
     );
 
     if (res.rowCount === 0) {
-      return NextResponse.json({ message: "Task not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Task not found" },
+        { status: 404 }
+      );
     }
 
-    // Returning the updated task as a response
-    return NextResponse.json(res.rows[0], { status: 200 });
-  } catch (error) {
-    console.error("Error updating task:", error);
     return NextResponse.json(
-      { message: "Failed to update task" },
+      { message: "Task updated successfully", task: res.rows[0] },
+      { status: 200 }
+    );
+  } catch (error: unknown) {
+    console.error("Error updating task:", error);
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "Failed to update task", error: error.message },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json(
+      { message: "Failed to update task", error: "Unknown error occurred" },
       { status: 500 }
     );
   }
@@ -41,8 +57,8 @@ export async function PUT(
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
-) {
-  const { id } = params; // Access params directly
+): Promise<NextResponse<ApiResponse>> {
+  const { id } = params;
 
   try {
     const res = await pool.query(
@@ -51,17 +67,26 @@ export async function DELETE(
     );
 
     if (res.rowCount === 0) {
-      return NextResponse.json({ message: "Task not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Task not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(
-      { message: "Task deleted successfully" },
+      { message: "Task deleted successfully", task: res.rows[0] },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error deleting task:", error);
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "Failed to delete task", error: error.message },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(
-      { message: "Failed to delete task" },
+      { message: "Failed to delete task", error: "Unknown error occurred" },
       { status: 500 }
     );
   }
