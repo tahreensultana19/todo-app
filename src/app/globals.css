@@ -1,58 +1,63 @@
-
 /* app/globals.css */
 
 /* Global styles for body */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Styling for input fields */
-  input {
-    font-size: 16px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: border-color 0.3s ease;
-  }
-  
-  /* Input focus styling */
-  input:focus {
-    border-color: #007BFF;
-    outline: none;
-  }
-  
-  /* Styling for buttons */
-  button {
-    font-size: 16px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 10px;
-    transition: background-color 0.3s ease;
-  }
-  
-  /* Button hover and active state styling */
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  button:active {
-    background-color: #004085;
-  }
-  
-  /* Responsive font size for smaller screens */
-  @media (max-width: 600px) {
-    body {
+  font-family: Arial, sans-serif;
+  background-color: #e8f4f8; /* Lighter background color for a fresher feel */
+  margin: 0;
+  padding: 0;
+  color: #333; /* Darker text color for better contrast */
+
+
+/* Styling for input fields */
+input {
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff; /* White background for input fields */
+  color: #333; /* Dark text for input fields */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Input focus styling */
+input:focus {
+  border-color: #28a745; /* Greenish focus color */
+  outline: none;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Soft green glow */
+}
+
+/* Styling for buttons */
+button {
+  font-size: 16px;
+  background-color: #28a745; /* Green button color */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+/* Button hover and active state styling */
+button:hover {
+  background-color: #218838; /* Darker green on hover */
+  transform: scale(1.05); /* Slightly enlarges button on hover */
+}
+
+button:active {
+  background-color: #1e7e34; /* Even darker green when active */
+  transform: scale(1); /* Returns to original size when clicked */
+}
+
+/* Responsive font size for smaller screens */
+@media (max-width: 600px) {
+  body {
       font-size: 14px;
-    }
-  
-    input, button {
-      font-size: 14px;
-    }
   }
+
+  input, button {
+      font-size: 14px;
+  }
+}
