@@ -2,7 +2,6 @@ import { Pool } from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
-
 export const pool = new Pool({
     host: 'dpg-cstabbrtq21c73a8rnv0-a.oregon-postgres.render.com',
     user: 'todo_app_dlk6_user',
@@ -15,6 +14,7 @@ export const pool = new Pool({
       rejectUnauthorized: false, // Accept self-signed certificates, if needed
     }
   });
+
 export const connectToDb = async () => {
   try {
     await pool.connect();
