@@ -2,35 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { pool } from "../../../../lib/db";
 
 
-export async function PUT(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
-  const { id } = await context.params; 
-  const { task_name } = await req.json();
-
-  if (!task_name) {
-    return NextResponse.json(
-      { message: "Task name is required" },
-      { status: 400 }
-    );
-  }
-
+// GET all list of todos
+export async function GET() {
   try {
-    const res = await pool.query(
-      "UPDATE todos SET task_name = $1 WHERE id = $2 RETURNING *",
-      [task_name, id]
-    );
-
-    if (res.rowCount === 0) {
-      return NextResponse.json({ message: "Task not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(res.rows[0], { status: 200 });
+    const result = await pool.query("SELECT * FROM todos");
+    return NextResponse.json(result.rows, { status: 200 });
   } catch (error) {
-    console.error("Error updating task:", error);
+    console.error("Error in get all route:", error);
     return NextResponse.json(
-      { message: "Failed to update task" },
+      { error: "Failed to retrieve tasks" },
       { status: 500 }
     );
   }
