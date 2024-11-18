@@ -3,32 +3,20 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-<<<<<<< HEAD
 // Create the Pool with environment variables
 export const pool = new Pool({
-  // host: process.env.DB_HOST,
-  // user: process.env.DB_USER,
-  // password: process.env.DB_PASSWORD,
-  // port: 5432, // Default PostgreSQL port
-  // database: process.env.DB_DATABASE,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  port: 5432, // Default PostgreSQL port
+  database: process.env.DB_DATABASE,
+  idleTimeoutMillis: 30000, // timeout in ms before idle connections are closed
+  connectionTimeoutMillis: 2000, // timeout for acquiring a connection
+  ssl: {
+    rejectUnauthorized: false, // Accept self-signed certificates, if needed
+  }
 });
 
-=======
-
-
-export const pool = new Pool({
-    host: 'dpg-cstabbrtq21c73a8rnv0-a.oregon-postgres.render.com',
-    user: 'todo_app_dlk6_user',
-    password: '77qkuB3mmGeoAFzyX69nC98lBKr4JwPp',
-    port: 5432, // Default PostgreSQL port
-    database: 'todo_app_dlk6',
-    idleTimeoutMillis: 30000, // timeout in ms before idle connections are closed
-    connectionTimeoutMillis: 2000, // timeout for acquiring a connection
-    ssl: {
-      rejectUnauthorized: false, // Accept self-signed certificates, if needed
-    }
-  });
->>>>>>> c71a2b1e137894e307aaa0bd0521d71bbfcfd83a
 export const connectToDb = async () => {
   try {
     await pool.connect();
