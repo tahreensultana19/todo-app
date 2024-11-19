@@ -1,10 +1,18 @@
 import { Pool } from "pg";
-import dotenv from "dotenv";
 
-dotenv.config();
+
 export const pool = new Pool({
-   
-  });
+    host: 'dpg-cstabbrtq21c73a8rnv0-a.oregon-postgres.render.com',
+    user: 'todo_app_dlk6_user',
+    password: '77qkuB3mmGeoAFzyX69nC98lBKr4JwPp',
+    port: 5432, 
+    database: 'todo_app_dlk6',
+    idleTimeoutMillis: 30000, 
+    connectionTimeoutMillis: 2000, 
+    ssl: {
+      rejectUnauthorized: false, 
+    }
+});
 
 export const connectToDb = async () => {
   try {
