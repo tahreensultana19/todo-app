@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
+
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { SearchBar } from "./searchbar";
 import useTasks from "../hooks/useTasks";
 import { Task } from "../types";
 
@@ -14,7 +16,6 @@ const TaskTable = () => {
     saveTask,
     deleteTask,
     setEditedTask,
-    loading,
   } = useTasks();
 
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
@@ -23,17 +24,26 @@ const TaskTable = () => {
     setFilteredTasks(tasks);
   }, [tasks]);
 
-  if (loading) {
-    return (
-      <div className="spinner-container">
-        <div className="spinner"></div>
-      </div>
+  const handleSearchResults = (results: Task[]) => {
+    setFilteredTasks(results);
+  };
+
+  const handleBlur = (id: number) => {
+    saveTask(id, { task: editedTask });
+  };
+
+  const handleStatusChange = async (task: Task) => {
+    const updatedTask = { ...task, status: !task.status };
+    await saveTask(task.id, { status: updatedTask.status });
+    setFilteredTasks((prevTasks: Task[]) =>
+      prevTasks.map((t: Task) => (t.id === task.id ? updatedTask : t)),
     );
-  }
+  };
 
   return (
     <TableContainer>
       <div className="m-2 flex items-center justify-between">
+        <SearchBar tasks={tasks} onSearchResults={handleSearchResults} />
         <Button variant="contained" color="success" onClick={() => addTask("New task")}>
           Add new task +
         </Button>
@@ -55,19 +65,19 @@ const TaskTable = () => {
                 <input
                   type="checkbox"
                   checked={task.status}
-                  onChange={() => saveTask(task.id, { status: !task.status })}
+                  onChange={() => handleStatusChange(task)}
                 />
               </TableCell>
               <TableCell>
                 {editingTaskId === task.id ? (
                   <TextField
                     value={editedTask}
-                    onChange={(e) => setEditedTask(e.target.value)}
-                    onBlur={() => saveTask(task.id, { task: editedTask })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditedTask(e.target.value)}
+                    onBlur={() => handleBlur(task.id)}
                     autoFocus
                   />
                 ) : (
-                  <span onClick={() => editTask(task.id, task.task)} style={{ cursor: "pointer" }}>
+                  <span onClick={() => editTask(task.id, task.task)} style={{ cursor: 'pointer' }}>
                     {task.task}
                   </span>
                 )}
