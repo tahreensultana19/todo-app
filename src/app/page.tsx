@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Todo } from './interfaces/todo';
-import TodoItem from './components/todo-item';
+// import { Todo } from './interfaces/todo';
+// import TodoItem from './components/todo-item';
 
 let nextId = 1; 
 
