@@ -1,10 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
-import { SearchBar } from "./searchbar";
 import useTasks from "../hooks/useTasks";
 import { Task } from "../types";
+import { SearchBar } from "./searchbar";
+
+
 
 const TaskTable = () => {
   const {
@@ -16,6 +17,7 @@ const TaskTable = () => {
     saveTask,
     deleteTask,
     setEditedTask,
+    loading,
   } = useTasks();
 
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
@@ -40,10 +42,19 @@ const TaskTable = () => {
     );
   };
 
+  if (loading) {
+    return (
+      <div className="spinner-container">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+
   return (
     <TableContainer>
       <div className="m-2 flex items-center justify-between">
-        <SearchBar tasks={tasks} onSearchResults={handleSearchResults} />
+      <SearchBar tasks={tasks} onSearchResults={handleSearchResults} />
+
         <Button variant="contained" color="success" onClick={() => addTask("New task")}>
           Add new task +
         </Button>
@@ -65,19 +76,19 @@ const TaskTable = () => {
                 <input
                   type="checkbox"
                   checked={task.status}
-                  onChange={() => handleStatusChange(task)}
+                  onChange={() => saveTask(task.id, { status: !task.status })}
                 />
               </TableCell>
               <TableCell>
                 {editingTaskId === task.id ? (
                   <TextField
                     value={editedTask}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditedTask(e.target.value)}
-                    onBlur={() => handleBlur(task.id)}
+                    onChange={(e) => setEditedTask(e.target.value)}
+                    onBlur={() => saveTask(task.id, { task: editedTask })}
                     autoFocus
                   />
                 ) : (
-                  <span onClick={() => editTask(task.id, task.task)} style={{ cursor: 'pointer' }}>
+                  <span onClick={() => editTask(task.id, task.task)} style={{ cursor: "pointer" }}>
                     {task.task}
                   </span>
                 )}

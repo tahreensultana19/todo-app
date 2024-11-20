@@ -81,7 +81,7 @@ const useTasks = () => {
         throw new Error("Task not found");
       }
 
-      const response = await fetch(`/api/update-task?id=${id}`,{
+      const response = await fetch(`/api/update-task?id=${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
