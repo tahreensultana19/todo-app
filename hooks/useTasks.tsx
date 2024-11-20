@@ -5,9 +5,11 @@ const useTasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   const [editedTask, setEditedTask] = useState<string>("");
-  const [error, setError] = useState<string | null>(null); // State to store error messages
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchTasks = async () => {
+    setLoading(true);
     try {
       const response = await fetch("/api/get-task");
       if (!response.ok) {
@@ -16,11 +18,13 @@ const useTasks = () => {
       }
       const data = await response.json();
       setTasks(data);
+      setError(null);
     } catch (err) {
-      // Type assertion to handle the error properly
       const errorMessage = err instanceof Error ? err.message : String(err);
       console.error(errorMessage);
-      setError(errorMessage); // Set error message for user feedback
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,8 +35,8 @@ const useTasks = () => {
   const addTask = async (task: string) => {
     if (!task.trim()) {
       console.error("Task cannot be empty");
-      setError("Task cannot be empty."); // Set error for user feedback
-      return; // Prevent sending an empty task
+      setError("Task cannot be empty.");
+      return;
     }
 
     const newTask = {
@@ -56,12 +60,12 @@ const useTasks = () => {
       }
 
       const addedTask = await response.json();
-      setTasks([addedTask, ...tasks]); // Add the new task to the top of the list
-      setError(null); // Clear any previous errors
+      setTasks([addedTask, ...tasks]);
+      setError(null);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       console.error("Error adding task:", errorMessage);
-      setError(errorMessage); // Set error for user feedback
+      setError(errorMessage);
     }
   };
 
@@ -77,7 +81,7 @@ const useTasks = () => {
         throw new Error("Task not found");
       }
 
-      const response = await fetch(`/api/update-task?id=${id}`, {
+      const response = await fetch(`/api/update-task?id=${id}`,{
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -92,16 +96,16 @@ const useTasks = () => {
 
       const updatedTask = await response.json();
       setTasks((prevTasks) =>
-        prevTasks.map((task) => (task.id === id ? updatedTask : task)),
+        prevTasks.map((task) => (task.id === id ? updatedTask : task))
       );
-      await fetchTasks(); // Refresh tasks
-      setError(null); // Clear any previous errors
+      setError(null);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       console.error("Error saving task:", errorMessage);
-      setError(errorMessage); // Set error for user feedback
+      setError(errorMessage);
+    } finally {
+      setEditingTaskId(null);
     }
-    setEditingTaskId(null);
   };
 
   const deleteTask = async (id: number): Promise<void> => {
@@ -115,25 +119,26 @@ const useTasks = () => {
         throw new Error(`Error deleting task: ${errorText}`);
       }
 
-      setTasks(tasks.filter((task) => task.id !== id));
-      setError(null); // Clear any previous errors
+      setTasks((tasks) => tasks.filter((task) => task.id !== id));
+      setError(null);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       console.error("Error deleting task:", errorMessage);
-      setError(errorMessage); // Set error for user feedback
+      setError(errorMessage);
     }
   };
 
   return {
     tasks,
- addTask,
+    addTask,
     editingTaskId,
     editedTask,
     editTask,
     saveTask,
     deleteTask,
     setEditedTask,
-    error, // Expose error state for user feedback
+    error,
+    loading,
   };
 };
 
