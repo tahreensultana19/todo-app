@@ -29,7 +29,7 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
             To-Do List
             {/* Icon on the right side of the title */}
             <img 
-              src="/niceicon.ico" 
+              src="assets/niceicon.ico" 
               alt="To-Do Icon" 
               style={{
                 width: '40px', // Adjust size

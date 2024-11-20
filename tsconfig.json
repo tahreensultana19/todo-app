@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2020", // or "ESNext"
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "allowJs": false, // Set to true only if you have JS files
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -30,6 +30,6 @@
     ".next/types/**/*.ts",
     "app/lib/placeholder-data.ts",
     "scripts/seed.js"
-  ],
+, "next.config.js"  ],
   "exclude": ["node_modules"]
 }

@@ -1,0 +1,7 @@
+// types.ts
+export interface Task {
+    id: number;
+    task: string;
+    status: boolean;
+    date: string;
+  }
