@@ -1,7 +1,9 @@
 // next.config.js
 
 const nextConfig = {
-  // config options here
+  env: {
+    POSTGRES_URL: process.env.POSTGRES_URL,
+  },
 };
 
 module.exports = nextConfig;
