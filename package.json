@@ -13,8 +13,9 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@mui/material": "^6.1.7",
+    "@mui/material": "^6.1.8",
     "@types/bcrypt": "^5.0.2",
+    "@vercel/postgres": "^0.10.0",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",

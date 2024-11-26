@@ -14,9 +14,8 @@ export default async function handler(
     const { id } = req.query;
     const { task, status } = req.body;
 
+    const client = await pool.connect();
     try {
-      const client = await pool.connect();
-
       // Fetch the existing task to ensure the task field is not null
       const existingTaskResult = await client.query(
         "SELECT task FROM todo WHERE id = $1",
@@ -43,6 +42,7 @@ export default async function handler(
       console.error("Error updating task:", error);
       return res.status(500).json({ error: "Internal Server Error" });
     } finally {
+      client.release(); // Ensure the client is released back to the pool
     }
   } else {
     res.setHeader("Allow", ["PUT"]);

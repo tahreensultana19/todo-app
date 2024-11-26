@@ -22,9 +22,7 @@ export function SearchBar({ tasks, onSearchResults }: SearchBarProps) {
 
   return (
     <form>
-      <label htmlFor="default-search">
-        Search
-      </label>
+      <label htmlFor="default-search">Search</label>
       <div>
         <input
           type="text"
