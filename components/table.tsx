@@ -13,8 +13,10 @@ import {
 import { AddTask, UpdateTask, DeleteTask, GetTasks } from "../lib/data";
 import { Task } from "../types";
 import { SearchBar } from "./searchbar";
-import Loading from "../app/loading";
-import { Suspense } from "react";
+// import Loading from "../app/loading";
+// import { Suspense } from "react";
+import TableSkeleton from "./TableSkeleton";
+
 
 interface TableComponentProps {
   tasks: Task[];
@@ -24,21 +26,32 @@ const TableComponent: React.FC<TableComponentProps> = ({ tasks }) => {
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   const [editedTask, setEditedTask] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
-    updateTasks();
-  }, [tasks]);
+    // Fetch tasks on mount
+    fetchTasks();
+  }, []);
 
-  const updateTasks = async () => {
-    const fetchedTasks = await GetTasks();
-    if (!fetchedTasks) return;
-    const updatedTasks: Task[] = fetchedTasks.map((task) => ({
-      ...task,
-      status: false, // Use the actual status from the database
-      date: new Date(task.date).toISOString(), // Convert date to ISO string
-    }));
-    setTaskList(updatedTasks);
-    setFilteredTasks(updatedTasks);
+  const fetchTasks = async () => {
+    setIsLoading(true);
+    try {
+      const fetchedTasks = await GetTasks();
+      if (!fetchedTasks) return;
+
+      const updatedTasks: Task[] = fetchedTasks.map((task) => ({
+        ...task,
+        status: false,
+        date: new Date(task.date).toISOString(),
+      }));
+      setTaskList(updatedTasks);
+      setFilteredTasks(updatedTasks);
+    } catch (error) {
+      console.error("Error fetching tasks", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleAddTask = async (task: string) => {
@@ -49,7 +62,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ tasks }) => {
 
     const date = new Date().toISOString();
     await AddTask(task, false, date); // Provide a default value for status and date
-    await updateTasks();
+    await fetchTasks();
   };
 
   const handleEditTask = (id: number, task: string): void => {
@@ -59,13 +72,13 @@ const TableComponent: React.FC<TableComponentProps> = ({ tasks }) => {
 
   const handleSaveTask = async (id: number, updates: Partial<Task>) => {
     await UpdateTask(id, updates.task || "");
-    await updateTasks();
+    await fetchTasks();
     setEditingTaskId(null);
   };
 
   const handleDeleteTask = async (id: number): Promise<void> => {
     await DeleteTask(id);
-    await updateTasks();
+    await fetchTasks();
     console.log("Task deleted successfully");
   };
 
@@ -79,15 +92,19 @@ const TableComponent: React.FC<TableComponentProps> = ({ tasks }) => {
 
   const handleStatusChange = async (task: Task) => {
     const updatedTask = { ...task, status: !task.status };
-
     await handleSaveTask(task.id, { status: updatedTask.status });
-    setFilteredTasks((prevTasks: Task[]) =>
-      prevTasks.map((t: Task) => (t.id === task.id ? updatedTask : t)),
+    setFilteredTasks((prev) =>
+      prev.map((t) => (t.id === task.id ? updatedTask : t))
     );
   };
 
+  if (isLoading) {
+    return <TableSkeleton />;
+  }
+
+
   return (
-    <Suspense fallback={<Loading />}>
+    // <Suspense fallback={<Loading />}>
       <TableContainer>
         <div className="m-2 flex items-center justify-between">
           <SearchBar tasks={taskList} onSearchResults={handleSearchResults} />
@@ -153,7 +170,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ tasks }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Suspense>
+    // </Suspense>
   );
 };
 
